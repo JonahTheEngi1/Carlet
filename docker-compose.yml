@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-carlet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-carletpass}
+      POSTGRES_DB: ${POSTGRES_DB:-carletdb}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-carlet}"]
+      interval: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=${POSTGRES_USER:-carlet}
+      - PGPASSWORD=${POSTGRES_PASSWORD:-carletpass}
+      - PGDATABASE=${POSTGRES_DB:-carletdb}
+    volumes:
+      - uploads:/usr/src/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  carlet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_BASE44_APP_ID: ${VITE_BASE44_APP_ID:-}
+        VITE_BASE44_FUNCTIONS_VERSION: ${VITE_BASE44_FUNCTIONS_VERSION:-}
+        VITE_BASE44_APP_BASE_URL: ${VITE_BASE44_APP_BASE_URL:-}
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  uploads:
