@@ -1,10 +1,10 @@
-FROM node:18-alpine
+FROM node:18-bullseye-slim
 
 WORKDIR /usr/src/app
 
-# Only install production deps for runtime image
-COPY backend/package.json backend/package-lock.json* ./ 
-RUN npm ci --production --legacy-peer-deps
+# Install production dependencies
+COPY backend/package.json backend/package-lock.json* ./
+RUN npm install --production --legacy-peer-deps
 
 # Copy backend sources
 COPY backend/ .
@@ -14,5 +14,4 @@ RUN mkdir -p /usr/src/app/uploads
 
 EXPOSE 3000
 
-# Start the server
 CMD ["node", "server.js"]
