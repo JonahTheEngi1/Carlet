@@ -1,0 +1,25 @@
+{
+  "name": "Note",
+  "type": "object",
+  "properties": {
+    "car_id": {
+      "type": "string",
+      "description": "Reference to the Car"
+    },
+    "content": {
+      "type": "string",
+      "description": "Note text content"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "stage_name": {
+      "type": "string",
+      "description": "Stage the car was in when note was written"
+    }
+  },
+  "required": [
+    "car_id",
+    "content"
+  ]
+}

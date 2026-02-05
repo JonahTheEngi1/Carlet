@@ -1,0 +1,40 @@
+{
+  "name": "Location",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the shop location"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Timezone for the location"
+    },
+    "stages": {
+      "type": "array",
+      "description": "Ordered list of workflow stages",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "stages"
+  ]
+}

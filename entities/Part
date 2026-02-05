@@ -1,0 +1,40 @@
+{
+  "name": "Part",
+  "type": "object",
+  "properties": {
+    "car_id": {
+      "type": "string",
+      "description": "Reference to the Car"
+    },
+    "name": {
+      "type": "string",
+      "description": "Part name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "needed",
+        "ordered",
+        "shipped",
+        "received",
+        "installed",
+        "returned"
+      ],
+      "default": "needed"
+    },
+    "eta": {
+      "type": "string",
+      "format": "date"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "cost": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "car_id",
+    "name"
+  ]
+}

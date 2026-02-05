@@ -1,0 +1,67 @@
+{
+  "name": "Car",
+  "type": "object",
+  "properties": {
+    "location_id": {
+      "type": "string",
+      "description": "Reference to the Location"
+    },
+    "vin": {
+      "type": "string",
+      "description": "Vehicle Identification Number"
+    },
+    "year": {
+      "type": "number"
+    },
+    "make": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "trim": {
+      "type": "string"
+    },
+    "license_plate": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_phone": {
+      "type": "string"
+    },
+    "customer_email": {
+      "type": "string"
+    },
+    "current_stage_id": {
+      "type": "string",
+      "description": "Current workflow stage ID"
+    },
+    "last_activity": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "check_in_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "check_out_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "location_id",
+    "vin",
+    "current_stage_id"
+  ]
+}
