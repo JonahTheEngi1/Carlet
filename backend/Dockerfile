@@ -2,7 +2,7 @@ FROM node:18-bullseye-slim
 
 WORKDIR /usr/src/app
 
-# Install production dependencies
+# Copy package manifest(s) and install production dependencies
 COPY backend/package.json backend/package-lock.json* ./
 RUN npm install --production --legacy-peer-deps
 

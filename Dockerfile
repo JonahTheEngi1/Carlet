@@ -1,23 +1,22 @@
-FROM node:18-alpine AS build
+FROM node:18-bullseye-slim AS build
 
 WORKDIR /app
 
-# Install dependencies
+# Install system build tools required by some packages (keeps build robust)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3 make g++ build-essential && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy package manifests and install dependencies (including devDeps for build)
 COPY package.json package-lock.json* ./
-RUN npm ci --legacy-peer-deps
+# Use npm install so build works even when package-lock.json is missing
+RUN npm install --legacy-peer-deps
 
-# Copy source, build
+# Copy source and build
 COPY . .
-ARG VITE_BASE44_APP_ID
-ARG VITE_BASE44_FUNCTIONS_VERSION
-ARG VITE_BASE44_APP_BASE_URL
-ENV VITE_BASE44_APP_ID=${VITE_BASE44_APP_ID}
-ENV VITE_BASE44_FUNCTIONS_VERSION=${VITE_BASE44_FUNCTIONS_VERSION}
-ENV VITE_BASE44_APP_BASE_URL=${VITE_BASE44_APP_BASE_URL}
-
 RUN npm run build
 
-# Runtime image
+# Production image: nginx serving static files
 FROM nginx:stable-alpine AS runtime
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
