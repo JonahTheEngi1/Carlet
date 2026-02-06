@@ -1,17 +1,9 @@
-FROM node:18-bullseye-slim
+FROM node:20-bookworm
+WORKDIR /app
 
-WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Copy package manifest(s) and install production dependencies
-COPY backend/package.json backend/package-lock.json* ./
-RUN npm install --production --legacy-peer-deps
-
-# Copy backend sources
-COPY backend/ .
-
-# Ensure uploads dir exists
-RUN mkdir -p /usr/src/app/uploads
-
+COPY . .
 EXPOSE 3000
-
-CMD ["node", "server.js"]
+CMD ["npm","start"]
